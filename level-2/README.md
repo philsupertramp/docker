@@ -218,7 +218,7 @@ we can later use the `NAMES` column to access our container, e.g.
 ```
 Or stopping the container
 ```shell
->  docker stop brave_bouman                                                                             ✔ 
+>  docker stop brave_bouman
 brave_bouman
 > docker ps
 CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES

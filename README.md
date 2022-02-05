@@ -15,10 +15,14 @@ The `docker` command
 - volume mounting
 - hosting a static webpage in the local network
 
-## Level 3:
+## [Level 3](level-3):
+Python container with dependencies,
 `docker-compose`
 - syntax
 - persistent volumes
 - networking
+- flask
 - django + postgresql example
 
+## TODO:
+- GPU support

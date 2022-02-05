@@ -4,6 +4,10 @@ A quick tour through the docker landscape.
 # Disclaimer
 **Note: Currently only supported by x86 UNIX host machines**
 
+## Requirements:
+- `docker`
+- `python>=3.6`
+
 ## [Level 1](/level-1):
 Dockerfiles
 - images

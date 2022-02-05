@@ -1,0 +1,14 @@
+version: '3' # < required
+
+services: # begins definition of services to run in composition
+  flask-app: # start of definition of the "flask-app" service
+    image: flask-app:latest # the image to use for the service
+    build: # build config if the image is not available
+      context: .
+    ports: # ports to forward from the running container
+      - "8000:5000"
+    volumes: # volumes to mount into the container
+      - ".:/usr/app"
+    command: [ # the command to run in the container
+       "flask", "run", "--host=0.0.0.0"
+    ]

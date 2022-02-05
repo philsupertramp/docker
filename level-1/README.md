@@ -60,6 +60,7 @@ Successfully tagged custom-ubuntu:latest
   > docker run custom-ubuntu:latest whoami # displays current user, used in the running container
   root # this feels dangerous
   ```
+  _Unfortunately a solution for this problem needs to be postponed and can be found in [level-3/django-postgres-docker-compose](../level-3/django-postgres-docker-compose)
   What damage could do this to the host?  
   Inspecting this further
   ```shell

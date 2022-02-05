@@ -1,0 +1,34 @@
+version: '3'
+
+services:
+  web:
+    build:
+      context: .
+    image: django-app
+    command: [
+      "python", "manage.py", "runserver", "0.0.0.0:8000"
+    ]
+    ports:
+      - "8000:8000"
+    depends_on: # defines dependencies
+      - db
+    volumes: # mount the current directory
+      - .:/usr/src/app
+    environment: # required environment variables for the container
+      POSTGRES_PASSWORD: example
+      POSTGRES_USER: example
+      POSTGRES_DB: example
+      POSTGRES_HOST: db
+
+  db:
+    image: postgres:12
+    restart: always
+    volumes:
+      - db_data:/var/lib/postgresql/data # use the volume defined in `volumes`
+    environment: # required environment variables for the container
+      POSTGRES_PASSWORD: example
+      POSTGRES_USER: example
+      POSTGRES_DB: example
+
+volumes: # start definition of volumes
+  db_data: # a named volume without additional config, this will create a persistent storage

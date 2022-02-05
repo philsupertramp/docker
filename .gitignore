@@ -1,2 +1,4 @@
 .vimrc
 .idea/
+*__pycache__
+*.pyc

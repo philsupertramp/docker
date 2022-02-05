@@ -1,5 +1,8 @@
 # Docker tutorial
-A quick and dirty tour through the docker landscape.
+A quick tour through the docker landscape.
+
+# Disclaimer
+**Note: Currently only supported by x86 UNIX host machines**
 
 ## [Level 1](/level-1):
 Dockerfiles

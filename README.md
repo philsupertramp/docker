@@ -1,18 +1,19 @@
 # Docker tutorial
 A quick and dirty tour through the docker landscape.
 
-## Level 1:
+## [Level 1](/level-1):
 Dockerfiles
-- syntax
-- cache
+- images
+- containers
 - base images
-- best practices
+- some best practices
 
-## Level 2:
+## [Level 2](/level-2):
 The `docker` command
+- extended dockerfiles
 - port forwarding
 - volume mounting
-- hosting an app in the local network
+- hosting a static webpage in the local network
 
 ## Level 3:
 `docker-compose`

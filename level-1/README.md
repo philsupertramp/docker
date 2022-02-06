@@ -9,10 +9,48 @@
 
 
 ## Running a container with a pre-built image
+
+### UNIX (x86 architecture) 
 ```shell
-> docker run -it ubuntu:21.04
+> docker run -it python:3.8
 ```
 will launch a container with the image `ubuntu:latest`
+
+### UNIX (ARM architecture)
+Different host architectures require different image architectures.
+Running given image on a RaspberryPi B+ v1.2 (from 2014) will not work out of the box, but it will tell us what went wrong
+```shell
+> docker run -it python:3.8
+Unable to find image 'python:3.8' locally
+3.8: Pulling from library/python
+8b70a9729607: Pull complete
+Digest: sha256:ba394fabd516b39ccf8597ec656a9ddd7d0a2688ed8cb373ca7ac9b6fe67848f
+Status: Downloaded newer image from python:3.8
+WARNING: The requested image's platform (linux/arm/v7) does not match the detected host platform (linux/arm/v6) and no specific platform was requested
+```
+You can look up specific base images for different architectures [here](https://github.com/docker-library/official-images#architectures-other-than-amd64).
+
+To find the architecture used in your base system you can call
+```shell
+> uname -m
+armv61
+```
+on UNIX devices.
+For Windows devices this might require more work by the user, described [here](https://www.addictivetips.com/windows-tips/check-if-your-processor-is-32-bit-or-64-bit/).
+
+So in order to start a python container we need to select an image from `arm32v6/`, specificly
+```shell
+> docker run -it arm32v6/python:3.8
+```
+### Windows
+```shell
+> docker run -it python:3.8
+```
+
+For more info, and how to use `docker` under Windows, see [ubuntu.com](https://ubuntu.com/tutorials/windows-ubuntu-hyperv-containers#1-overview)
+
+**Note: Out of convenience, to not bloat the repository and because I simply can't test all things in all architectures
+I decided to only use the common `x86` architecture in the following.**
 
 # Dockerfiles
 Dockerfile syntax ([reference](https://docs.docker.com/engine/reference/builder))
@@ -55,38 +93,41 @@ Successfully tagged custom-ubuntu:latest
   86M	total
 
   ```
-- 
-  ```shell
-  > docker run custom-ubuntu:latest whoami # displays current user, used in the running container
-  root # this feels dangerous
-  ```
-  _Unfortunately a solution for this problem needs to be postponed and can be found in [level-3/django-postgres-docker-compose](../level-3/django-postgres-docker-compose)_  
+  - 
+    ```shell
+    > docker run custom-ubuntu:latest whoami # displays current user, used in the running container
+    root # this feels dangerous
+    ```
+    _Unfortunately a solution for this problem needs to be postponed and can be found in [level-3/django-postgres-docker-compose](../level-3/django-postgres-docker-compose)_  
 
-  What damage could do this to the host?  
-  Inspecting this further
-  ```shell
-  > docker run -it custom-ubuntu:latest bash
-  root@6d67ddcb1626:/# lsblk -o NAME,SIZE,MOUNTPOINT,PATH
-  NAME     SIZE MOUNTPOINT PATH
-  sda    931.5G            /dev/sda
-  |-sda1   300M            /dev/sda1
-  `-sda2 931.2G            /dev/sda2  # <- this looks like the host fs, can we access it?
+    What damage could do this to the host?  
+    Inspecting this further
+    ```shell
+    > docker run -it custom-ubuntu:latest bash
+    root@6d67ddcb1626:/# lsblk -o NAME,SIZE,MOUNTPOINT,PATH
+    NAME     SIZE MOUNTPOINT PATH
+    sda    931.5G            /dev/sda
+    |-sda1   300M            /dev/sda1
+    `-sda2 931.2G            /dev/sda2  # <- this looks like the host fs, can we access it?
 
-  root@6d67ddcb1626:/# ls -la /dev/sda
-  ls: cannot access '/dev/sda': No such file or directory
+    root@6d67ddcb1626:/# ls -la /dev/sda
+    ls: cannot access '/dev/sda': No such file or directory
   
-  # looks like we can't access it, but why is it available
-  # looking at mounted devices
-  root@6d67ddcb1626:/# mount | grep "^/dev" 
-  /dev/mapper/luks-dbdfb12b-35ea-454d-9d42-48ea05b993d8 on /etc/resolv.conf type ext4 (rw,noatime)
-  /dev/mapper/luks-dbdfb12b-35ea-454d-9d42-48ea05b993d8 on /etc/hostname type ext4 (rw,noatime)
-  /dev/mapper/luks-dbdfb12b-35ea-454d-9d42-48ea05b993d8 on /etc/hosts type ext4 (rw,noatime)
-  ```
-  **NEVER EXECUTE THE FOLLOWING ON YOUR OWN MACHINE!**
-  ```shell
-  # let's try deleting everything will this affect the host system?
-  root@6d67ddcb1626:/# rm -rf /
-  ```
+    # looks like we can't access it, but why is it available
+    # looking at mounted devices
+    root@6d67ddcb1626:/# mount | grep "^/dev" 
+    /dev/mapper/luks-dbdfb12b-35ea-454d-9d42-48ea05b993d8 on /etc/resolv.conf type ext4 (rw,noatime)
+    /dev/mapper/luks-dbdfb12b-35ea-454d-9d42-48ea05b993d8 on /etc/hostname type ext4 (rw,noatime)
+    /dev/mapper/luks-dbdfb12b-35ea-454d-9d42-48ea05b993d8 on /etc/hosts type ext4 (rw,noatime)
+    ```
+    **NEVER EXECUTE THE FOLLOWING ON YOUR OWN MACHINE!**
+    ```shell
+    # let's try deleting everything will this affect the host system?
+    root@6d67ddcb1626:/# rm -rf --no-preserve-root /
+    ```
+    Running this command will delete all files we own as executing user. And because we're `root` at the moment
+    this command will remove the content from within the container. Especially with mounted devices this can cause more damage
+    than anticipated.  
 
 ### Modifying a running container and committing the progress
 

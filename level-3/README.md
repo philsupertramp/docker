@@ -69,6 +69,28 @@ See [django-postgres-docker-compose](django-postgres-docker-compose)
 # build & run the setup
 > docker-compose up
 ```
+
+## Resource Allocation
+### Common Resource Types
+To specify which resources a container is allowed to use on the host machine we can provide
+specific resource parameters in `docker run`
+- `-m=` to set the amount of memory for the running container
+- `--cpus` specifies how much of the available CPU resource the container can use
+
+Example:
+```shell
+> docker run -v $PWD:/usr/app -m="6M" --cpus="0.1" python:3.8 python /usr/app/script.py
+```
+for more see [the docs](https://docs.docker.com/config/containers/resource_constraints/).
+
+### GPU support
+Docker comes with full support for NVIDIA GPUs – according to their [bug tracker](https://github.com/docker/cli/issues/2063).  
+For more info consult the [official docs](https://docs.docker.com/config/containers/resource_constraints/#gpu).
+
+
+_A comment from Linus Torvalds about the cooperation between Linux and NVIDIA:_  
+https://www.youtube.com/watch?v=IVpOyKCNZYw
+
 ## More resources
 - A list of resources for `docker-compose`: https://github.com/docker/awesome-compose
 

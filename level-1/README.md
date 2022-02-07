@@ -38,6 +38,11 @@ armv61
 on UNIX devices.
 For Windows devices this might require more work by the user, described [here](https://www.addictivetips.com/windows-tips/check-if-your-processor-is-32-bit-or-64-bit/).
 
+Or by using
+```shell
+> docker info
+```
+
 So in order to start a python container we need to select an image from `arm32v6/`, specificly
 ```shell
 > docker run -it arm32v6/python:3.8

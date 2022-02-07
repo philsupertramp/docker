@@ -30,6 +30,4 @@ Python container with dependencies,
 - networking
 - flask
 - django + postgresql example
-
-## TODO:
-- GPU support
+- resource allocation

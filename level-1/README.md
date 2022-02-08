@@ -53,11 +53,25 @@ So in order to start a python container we need to select an image from `arm32v6
 ```
 
 For more info, and how to use `docker` under Windows, see [ubuntu.com](https://ubuntu.com/tutorials/windows-ubuntu-hyperv-containers#1-overview)
+or the [docker documentation](https://docs.docker.com/desktop/windows/install/).
 
+Windows exclusive containers are available at the [microsoft registry](https://mcr.microsoft.com/v2/_catalog) (or in the [docker registry](https://hub.docker.com/publishers/microsoftowner)).
+The images can be used e.g.
+```shell
+> docker run -it mcr.microsoft.com/windows
+```
+
+## Limitations
+Not all docker images can be used on all machines,
+due to the fact that docker is using the host system
+to bootstrap a container. This applies to the host's architecture as
+well as the underlying OS.
+
+
+# Dockerfiles
 **Note: Out of convenience, to not bloat the repository and because I simply can't test all things in all architectures
 I decided to only use the common `amd64/x86` architecture in the following.**
 
-# Dockerfiles
 Dockerfile syntax ([reference](https://docs.docker.com/engine/reference/builder))
 ## Linux (Ubuntu)
 An image that works as a host system [linux.Dockerfile](linux.Dockerfile):

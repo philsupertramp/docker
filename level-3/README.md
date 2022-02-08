@@ -1,5 +1,38 @@
 # Level 3:
 
+## Resolving security concerns
+We've seen several times already how to use a directory other than
+`/` for storing the files of our app within a container.  
+But apart from having an unorganized container and potentially allowing other users of your running
+container to access your files, this does not too much harm for the running container or the host machine. 
+A bigger issue is the fact that we execute everything as the `root` user.
+### Dedicated user to solve security issues
+In order to not run the container as `root`, as we found out in [`level-1`](/level-1), we
+need to create a dedicated user to run the task.
+
+To do so we can use the `USER` statement, as seen in `linux.Dockerfile`
+
+```dockerfile
+FROM ubuntu:21.04
+
+# create dedecated user to run the app with
+RUN useradd -m app-user -s /bin/sh
+
+# switch to user
+USER app-user
+
+WORKDIR /usr/src/app
+```
+Every image starts off using `root`, we first need to create a user, and provide a default shell for that user.
+Then we can switch over and continue as the dedicated user.  
+Now we can use the container just like before
+
+```shell
+> docker build -f linux.Dockerfile -t ubuntu-user:latest .
+> docker run ubuntu-user:latest whoami
+app-user
+```
+
 ## Python Script with dependencies
 A Python script with dependencies
 (see [python-script-with-dependencies](python-script-with-dependencies))

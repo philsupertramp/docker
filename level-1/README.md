@@ -10,7 +10,7 @@
 
 ## Running a container with a pre-built image
 
-### UNIX (x86 architecture) 
+### UNIX (amd64/x86 architecture)
 ```shell
 > docker run -it python:3.8
 ```
@@ -55,7 +55,7 @@ So in order to start a python container we need to select an image from `arm32v6
 For more info, and how to use `docker` under Windows, see [ubuntu.com](https://ubuntu.com/tutorials/windows-ubuntu-hyperv-containers#1-overview)
 
 **Note: Out of convenience, to not bloat the repository and because I simply can't test all things in all architectures
-I decided to only use the common `x86` architecture in the following.**
+I decided to only use the common `amd64/x86` architecture in the following.**
 
 # Dockerfiles
 Dockerfile syntax ([reference](https://docs.docker.com/engine/reference/builder))

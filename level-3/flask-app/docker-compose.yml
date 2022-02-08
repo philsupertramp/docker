@@ -9,6 +9,7 @@ services: # begins definition of services to run in composition
       - "8000:5000"
     volumes: # volumes to mount into the container
       - ".:/usr/app"
+    user: www-data # preexisting user, can be simply used
     command: [ # the command to run in the container
        "flask", "run", "--host=0.0.0.0"
     ]

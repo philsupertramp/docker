@@ -32,6 +32,12 @@ Now we can use the container just like before
 > docker run ubuntu-user:latest whoami
 app-user
 ```
+Alternatively we can reuse existing users, e.g. `www-data`
+```shell
+> docker run -u www-data -it ubuntu:21.04 whoami
+www-data
+```
+
 
 ## Python Script with dependencies
 A Python script with dependencies
@@ -83,14 +89,18 @@ using this [`flask-app/docker-compose.yml`](flask-app/docker-compose.yml) file w
 ```shell
 > docker-compose -f flask-app/docker-compose.yml up
 ```
+or alternatively using the `docker compose` command
+```shell
+> docker compose -f flask-app/docker-compose.yml up
+```
 or from within the `flask-app` directory shortly
 ```shell
-> docker-compose up
+> docker compose up
 ```
 we can launch the app in detached mode using `-d`.  
 To clean up and remove volumes and containers run
 ```shell
-> docker-compose -f flask-app/docker-compose.yml down -v
+> docker compose -f flask-app/docker-compose.yml down -v
 ```
 
 ## Django & PostgreSQL

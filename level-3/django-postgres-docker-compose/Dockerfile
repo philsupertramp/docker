@@ -16,5 +16,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
+# ENTRYPOINT statements will be executed upon container start
 ENTRYPOINT ["sh", "entrypoint.sh"]
 

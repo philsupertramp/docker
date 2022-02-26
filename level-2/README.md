@@ -246,6 +246,75 @@ Error response from daemon: No such container: crazy_mestorf
 Error: failed to start containers: crazy_mestorf
 ```
 
+## Housekeeping
+Using docker for a training purpose or by just using docker frequently we generate a lot of waste on the host system which we should clean up, once we're
+done developing a container image.
+
+### Useful commands
+#### Read
+- list running container instances
+```shell
+> docker ps
+> docker container ls
+```
+- list all available cotainer instances
+```shell
+> docker ps -a
+> docker container ls -a
+```
+- list all available container images
+```shell
+> docker images
+```
+- list all images, including intermediate images (caching layers)
+```shell
+> docker images -a
+```
+- get statistics from all running containers
+```shell
+> docker stats
+```
+
+#### Interact
+- start a stopped container with ID `[container_id]`
+```shell
+> docker start [container_id]
+```
+- start a container with ID `[container_id]` with a specific task
+```
+> docker run -it [container_id] sh
+```
+- run a task in a running container with ID `[container_id]`
+```
+> docker exec -it [container_id] sh
+```
+- stop a running container with ID `[container_id]`
+```shell
+> docker stop [container_id]
+```
+- stop all running containers
+```shell
+> docker stop $(docker ps -q)
+```
+#### Cleanup
+- remove a container image with ID `[image_id]`
+```shell
+> docker rmi [image_id]
+```
+- remove a container with ID `[container_id]`
+```shell
+> docker rm [container_id]
+```
+- remove all container images
+```shell
+> docker rmi $(docker images -q)
+```
+- remove all containers
+```shell
+> docker rm $(docker ps -a)
+```
+
+
 ## Summary:
 - `docker run`
   - `-v` to mount directories into a countainer
@@ -253,6 +322,10 @@ Error: failed to start containers: crazy_mestorf
   - `-d` to run in detached mode
   - `-it` for interactive mode
   - `--rm` remove after stopping (this invalidates the identifiers for this container and removes it completely once it's stopped)
+- `docker exec`: execute a task in a running container
 - `docker ps`: List all running containers
+- `docker images`: List all container images
 - `docker stop`: to stop a running container
 - `docker stop`: to start a stopped container
+- `docker rm`: remove containers
+- `docker rmi`: remove container images

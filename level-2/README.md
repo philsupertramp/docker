@@ -34,14 +34,14 @@ docker build -f python.Dockerfile -t python-level2:latest .
 ```
 #### Running a container using the image
 ```shell
-> docker run python-level2:latest
+$ docker run python-level2:latest
 This script is working.
 ```
 
 > But what's the target, and where does the `script.py` end up?
 
 ```shell
-> docker run -it python2:latest bash
+$ docker run -it python-level2:latest bash
 root@9dd4b046bd58:/# echo $PWD
 /
 ```
@@ -65,7 +65,7 @@ docker build -f python-workdir.Dockerfile -t python-workdir-level2:latest .
 ```
 #### Running a container using the image
 ```shell
-> docker run python-workdir-level2:latest
+$ docker run python-workdir-level2:latest
 This script is working.
 ```
 
@@ -103,14 +103,14 @@ and it's rather inconvenient to always rebuild the image after we change a line 
 So instead of rebuilding the image, we have the option of mounting a volume
 into a running container.
 ```shell
-> docker run -it -v $PWD:/usr/app python-workdir-level2:latest
+$ docker run -it -v $PWD:/usr/app python-workdir-level2:latest
 This script is working.
 
 # edit the file
-> echo -e "$(cat script.py | sed 's/is working/is still working/g')" > script.py
+$ echo -e "$(cat script.py | sed 's/is working/is still working/g')" > script.py
 
 # run the script again 
-> docker run -it -v $PWD:/usr/app python-workdir-level2:latest
+$ docker run -it -v $PWD:/usr/app python-workdir-level2:latest
 This script is still working.
 ```
 
@@ -137,17 +137,17 @@ COPY static-page.html /usr/share/nginx/html/
 ```
 
 ```shell
-> docker build -f nginx.Dockerfile -t webpage:latest .
+$ docker build -f nginx.Dockerfile -t webpage:latest .
 ...
-> docker run webpage:latest
+$ docker run webpage:latest
 ...
 ```
 ##### Problem
 It looks like the server is running, and we see output in the logs, usually a webserver hosts on port 80, so let's try 
 ```shell
-> curl -X 'GET' "http://localhost:80"
+$ curl -X 'GET' "http://localhost:80"
 curl: (7) Failed to connect to localhost port 80 after 0 ms: Connection refused
-> curl -X 'GET' "http://127.0.0.1:80"
+$ curl -X 'GET' "http://127.0.0.1:80"
 curl: (7) Failed to connect to 127.0.0.1 port 80 after 0 ms: Connection refused
 ```
 Neither `localhost` nor `127.0.0.1` answer anything on that port.
@@ -155,7 +155,7 @@ Neither `localhost` nor `127.0.0.1` answer anything on that port.
 ##### Solution
 We need to manually tell the `docker run` command to do port forwarding. We can do that the following
 ```shell
-> docker run -p 8080:80 webpage:latest
+$ docker run -p 8080:80 webpage:latest
 ```
 the `-p` flag awaits an argument with the syntax `host:container` with
   - `host`: IP address and/or port number on the host machine
@@ -164,7 +164,7 @@ the `-p` flag awaits an argument with the syntax `host:container` with
 And now the HTML page is available at [http://localhost:8080/index.html](http://localhost:8080/index.html) or [http://127.0.0.1:8080/index.html](http://127.0.0.1:8080/index.html).
 And due to the fact that we called it `index.html`, it's also available without the postfix `index.html`
 ```shell
-> curl -X 'GET' 'http://127.0.0.1:8080'
+$ curl -X 'GET' 'http://127.0.0.1:8080'
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -183,20 +183,20 @@ I would strongly advise against doing so, unless you really know what you're doi
 Now that we have a static website in place we also want to run it as a background process on our server.
 We can do that using the `-d` flag
 ```shell
-> docker run -p 8080:80 -d webpage:latest
+$ docker run -p 8080:80 -d webpage:latest
 ac3c90ed3b131ce6c5b3dd451652768d9597482030ae09d759d4b0522c69000d
 ```
 This gives us a UID for the created container.
 Using
 ```shell
-> docker ps
+$ docker ps
 CONTAINER ID   IMAGE            COMMAND                  CREATED          STATUS          PORTS                                   NAMES
 ac3c90ed3b13   webpage:latest   "/docker-entrypoint.…"   23 seconds ago   Up 22 seconds   0.0.0.0:8080->80/tcp, :::8080->80/tcp   brave_bouman
 ```
 we can list currently running containers. As you can see 13 characters are enough to identify our container. Additionally
 we can later use the `NAMES` column to access our container, e.g.
 ```shell
-> docker logs brave_bouman
+$ docker logs brave_bouman
 /docker-entrypoint.sh: /docker-entrypoint.d/ is not empty, will attempt to perform configuration
 /docker-entrypoint.sh: Looking for shell scripts in /docker-entrypoint.d/
 /docker-entrypoint.sh: Launching /docker-entrypoint.d/10-listen-on-ipv6-by-default.sh
@@ -218,16 +218,16 @@ we can later use the `NAMES` column to access our container, e.g.
 ```
 Or stopping the container
 ```shell
->  docker stop brave_bouman
+$ docker stop brave_bouman
 brave_bouman
-> docker ps
+$ docker ps
 CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
 ```
 And start it again
 ```shell
-> docker start brave_bouman
+$ docker start brave_bouman
 brave_bouman
-> docker ps
+$ docker ps
 CONTAINER ID   IMAGE            COMMAND                  CREATED         STATUS         PORTS                                   NAMES
 ac3c90ed3b13   webpage:latest   "/docker-entrypoint.…"   6 minutes ago   Up 4 seconds   0.0.0.0:8080->80/tcp, :::8080->80/tcp   brave_bouman
 ```
@@ -235,13 +235,13 @@ ac3c90ed3b13   webpage:latest   "/docker-entrypoint.…"   6 minutes ago   Up 4 
 ## Remove a container once it's stopped
 For single use containers we can use the `--rm` flag in the `docker run` command
 ```shell
-> docker run -p 8080:80 -d --rm webpage:latest
-> docker ps
+$ docker run -p 8080:80 -d --rm webpage:latest
+$ docker ps
 CONTAINER ID   IMAGE            COMMAND                  CREATED         STATUS         PORTS                                   NAMES
 3a0283333749   webpage:latest   "/docker-entrypoint.…"   5 seconds ago   Up 3 seconds   0.0.0.0:8080->80/tcp, :::8080->80/tcp   crazy_mestorf
-> docker stop crazy_mestorf
+$ docker stop crazy_mestorf
 crazy_mestorf
-> docker start crazy_mestorf
+$ docker start crazy_mestorf
 Error response from daemon: No such container: crazy_mestorf
 Error: failed to start containers: crazy_mestorf
 ```
@@ -254,64 +254,64 @@ done developing a container image.
 #### Read
 - list running container instances
 ```shell
-> docker ps
-> docker container ls
+$ docker ps
+$ docker container ls
 ```
 - list all available cotainer instances
 ```shell
-> docker ps -a
-> docker container ls -a
+$ docker ps -a
+$ docker container ls -a
 ```
 - list all available container images
 ```shell
-> docker images
+$ docker images
 ```
 - list all images, including intermediate images (caching layers)
 ```shell
-> docker images -a
+$ docker images -a
 ```
 - get statistics from all running containers
 ```shell
-> docker stats
+$ docker stats
 ```
 
 #### Interact
 - start a stopped container with ID `[container_id]`
 ```shell
-> docker start [container_id]
+$ docker start [container_id]
 ```
 - start a container with ID `[container_id]` with a specific task
 ```
-> docker run -it [container_id] sh
+$ docker run -it [container_id] sh
 ```
 - run a task in a running container with ID `[container_id]`
 ```
-> docker exec -it [container_id] sh
+$ docker exec -it [container_id] sh
 ```
 - stop a running container with ID `[container_id]`
 ```shell
-> docker stop [container_id]
+$ docker stop [container_id]
 ```
 - stop all running containers
 ```shell
-> docker stop $(docker ps -q)
+$ docker stop $(docker ps -q)
 ```
 #### Cleanup
 - remove a container image with ID `[image_id]`
 ```shell
-> docker rmi [image_id]
+$ docker rmi [image_id]
 ```
 - remove a container with ID `[container_id]`
 ```shell
-> docker rm [container_id]
+$ docker rm [container_id]
 ```
 - remove all container images
 ```shell
-> docker rmi $(docker images -q)
+$ docker rmi $(docker images -q)
 ```
 - remove all containers
 ```shell
-> docker rm $(docker ps -a)
+$ docker rm $(docker ps -a)
 ```
 
 

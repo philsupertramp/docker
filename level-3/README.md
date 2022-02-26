@@ -28,13 +28,13 @@ Then we can switch over and continue as the dedicated user.
 Now we can use the container just like before
 
 ```shell
-> docker build -f linux.Dockerfile -t ubuntu-user:latest .
-> docker run ubuntu-user:latest whoami
+$ docker build -f linux.Dockerfile -t ubuntu-user:latest .
+$ docker run ubuntu-user:latest whoami
 app-user
 ```
 Alternatively we can reuse existing users, e.g. `www-data`
 ```shell
-> docker run -u www-data -it ubuntu:21.04 whoami
+$ docker run -u www-data -it ubuntu:21.04 whoami
 www-data
 ```
 
@@ -44,22 +44,22 @@ A Python script with dependencies
 (see [python-script-with-dependencies](python-script-with-dependencies))
 
 ```shell
-> cd python-script-with-dependencies
+$ cd python-script-with-dependencies
 # build the image
-> docker build -t python-script-lvl-3:latest .
+$ docker build -t python-script-lvl-3:latest .
 # start a container using the image
-> docker run -v $PWD:/usr/app python-script-lvl-3:latest
+$ docker run -v $PWD:/usr/app python-script-lvl-3:latest
 ```
 This generated a beautiful image for us `python-script-with-dependencies/mandelbrot.png`  
 ![mandelbrot.png](mandelbrot.png)
 ## A simple Python webapp
 [flask-app](flask-app) can be build using
 ```shell
-> docker build -f flask-app/Dockerfile -t flask-app:latest flask-app 
+$ docker build -f flask-app/Dockerfile -t flask-app:latest flask-app 
 ```
 and run using
 ```shell
-> docker run -v $PWD/flask-app:/usr/app -p 8000:5000 flask-app:latest
+$ docker run -v $PWD/flask-app:/usr/app -p 8000:5000 flask-app:latest
 ```
 The app is now available at [http://127.0.0.1:8000](http://127.0.0.1:8000)  
 ![flask-app.png](flask-app.png)
@@ -87,20 +87,20 @@ services: # begins definition of services to run in composition
 ```
 using this [`flask-app/docker-compose.yml`](flask-app/docker-compose.yml) file we can start the service using
 ```shell
-> docker-compose -f flask-app/docker-compose.yml up
+$ docker-compose -f flask-app/docker-compose.yml up
 ```
 or alternatively using the `docker compose` command
 ```shell
-> docker compose -f flask-app/docker-compose.yml up
+$ docker compose -f flask-app/docker-compose.yml up
 ```
 or from within the `flask-app` directory shortly
 ```shell
-> docker compose up
+$ docker compose up
 ```
 we can launch the app in detached mode using `-d`.  
 To clean up and remove volumes and containers run
 ```shell
-> docker compose -f flask-app/docker-compose.yml down -v
+$ docker compose -f flask-app/docker-compose.yml down -v
 ```
 
 ## Django & PostgreSQL
@@ -108,9 +108,9 @@ Sometimes we want to launch multiple containers and want them to communicate in 
 Suppose we have a webapp that requires a running PostgreSQL instance.
 See [django-postgres-docker-compose](django-postgres-docker-compose)
 ```shell
-> cd django-postgres-docker-compose
+$ cd django-postgres-docker-compose
 # build & run the setup
-> docker-compose up
+$ docker-compose up
 ```
 
 ## Resource Allocation
@@ -122,7 +122,7 @@ specific resource parameters in `docker run`
 
 Example:
 ```shell
-> docker run -v $PWD:/usr/app -m="6M" --cpus="0.1" python:3.8 python /usr/app/script.py
+$ docker run -v $PWD:/usr/app -m="6M" --cpus="0.1" python:3.8 python /usr/app/script.py
 ```
 for more see [the docs](https://docs.docker.com/config/containers/resource_constraints/).
 

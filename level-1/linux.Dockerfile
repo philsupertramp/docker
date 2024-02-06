@@ -1,1 +1,1 @@
-FROM ubuntu:21.04
+FROM ubuntu:hirsute-20220113

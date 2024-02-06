@@ -1,4 +1,4 @@
-FROM ubuntu:21.04
+FROM ubuntu:hirsute-20220113
 
 RUN apt update
 RUN apt upgrade
